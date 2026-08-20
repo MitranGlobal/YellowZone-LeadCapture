@@ -20,6 +20,19 @@ submitting their details.
 | Payments | Razorpay Checkout (with hosted-link fallback) |
 | Hosting | Vercel |
 
+## Upgrading over an older copy
+
+If you unzip this release on top of a previous copy of the project, delete the
+components that no longer exist — unzipping overwrites files but never removes
+them, and the leftovers still import content exports that were deleted, which
+fails the type check:
+
+```bash
+./cleanup-stale.sh     # or: git rm the seven files, or just use a clean folder
+```
+
+A fresh `git clone` or unzipping into an empty directory needs none of this.
+
 ## Run it locally
 
 ```bash

@@ -19,6 +19,10 @@ import * as THREE from 'three';
 const GOLD = '#E8A317';
 const GOLD_DEEP = '#B9770E';
 
+/** Die body edge is at 1.34; the seal art fills 91.6% of the texture. */
+const DIE_RADIUS = 1.34;
+const FACE_RADIUS = DIE_RADIUS / 0.916;
+
 /** Soft elliptical shadow beneath the medallion, as a radial gradient. */
 function ContactShadow() {
   const texture = useMemo(() => {
@@ -62,29 +66,10 @@ function Medallion({ reduced }: { reduced: boolean }) {
 
   const texture = useLoader(THREE.TextureLoader, '/seal.png');
 
-  const faceMaterials = useMemo(() => {
+  useMemo(() => {
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = 8;
-    texture.center.set(0.5, 0.5);
     texture.needsUpdate = true;
-
-    const rim = new THREE.MeshStandardMaterial({
-      color: GOLD,
-      metalness: 0.95,
-      roughness: 0.32,
-    });
-    const face = new THREE.MeshStandardMaterial({
-      map: texture,
-      metalness: 0.12,
-      roughness: 0.52,
-    });
-    const back = new THREE.MeshStandardMaterial({
-      color: GOLD_DEEP,
-      metalness: 0.9,
-      roughness: 0.45,
-    });
-    // CylinderGeometry material order: [side, top, bottom]
-    return [rim, face, back];
   }, [texture]);
 
   useFrame((state) => {
@@ -122,21 +107,34 @@ function Medallion({ reduced }: { reduced: boolean }) {
 
   return (
     <group ref={group}>
-      {/* Die body: face carries the seal artwork, side is milled gold */}
-      <mesh material={faceMaterials} rotation={[Math.PI / 2, 0, 0]}>
+      {/* Milled gold die body. The artwork does NOT go on the cylinder cap:
+          three.js maps cap UVs from local Z→u and local X→v, which lands the
+          texture on its side. The face below uses planar UVs instead. */}
+      <mesh rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[1.34, 1.34, 0.13, 160]} />
+        <meshStandardMaterial color={GOLD_DEEP} metalness={0.92} roughness={0.36} />
+      </mesh>
+
+      {/* Die face. circleGeometry has standard planar UVs (x→u, y→v), so the
+          seal reads upright. Radius is FACE_RADIUS because the artwork fills
+          91.6% of the texture's half-width — this lands its outer ring exactly
+          on the 1.34 edge of the die body. alphaTest discards the transparent
+          corners so they never occlude the rim behind them. */}
+      <mesh position={[0, 0, 0.066]}>
+        <circleGeometry args={[FACE_RADIUS, 160]} />
+        <meshStandardMaterial
+          map={texture}
+          transparent
+          alphaTest={0.5}
+          metalness={0.12}
+          roughness={0.52}
+        />
       </mesh>
 
       {/* Milled outer rim */}
       <mesh>
         <torusGeometry args={[1.35, 0.055, 20, 180]} />
         <meshStandardMaterial color={GOLD} metalness={1} roughness={0.24} />
-      </mesh>
-
-      {/* Fine inner bead, the detail that reads as struck rather than printed */}
-      <mesh position={[0, 0, 0.068]}>
-        <torusGeometry args={[1.19, 0.012, 12, 180]} />
-        <meshStandardMaterial color={GOLD_DEEP} metalness={0.9} roughness={0.4} />
       </mesh>
 
       <pointLight
