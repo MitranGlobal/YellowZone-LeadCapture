@@ -7,11 +7,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: 'Yellow Zone for Schools — India’s emotional wellbeing certification',
   description:
-    'Your school reports academic results every term. Yellow Zone measures, benchmarks and certifies the thing it has never been able to show: how students actually feel.',
+    'Yellow Zone assesses your school with Emotion AI, scores it against a defined standard, and certifies it.',
   openGraph: {
     title: 'Yellow Zone for Schools — MiTran Global',
     description:
-      'Assessment, benchmark and certification for emotional wellbeing in schools. NABH did it for hospitals. LEED did it for buildings.',
+      'Assessment, benchmark and certification for emotional wellbeing in schools.',
     url: site.url,
     siteName: site.name,
     images: ['/og.png'],

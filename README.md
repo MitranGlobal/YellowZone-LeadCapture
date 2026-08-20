@@ -68,12 +68,15 @@ app/
   api/payment/order/      creates a Razorpay order
   api/payment/verify/     verifies the payment signature server-side
 components/
-  Hero.tsx                hero copy + orchestrated load sequence
+  Hero.tsx                hero copy + 3D medallion
   SealMedallion.tsx       the R3F certification medallion
+  MeasureSection.tsx      the five scored domains
+  StepsSection.tsx        three-step route to certification
+  FinalCta.tsx, Nav.tsx, Footer.tsx, StickyCta.tsx
   LeadModal.tsx           Framer Motion lead lightbox
   ScrollReveals.tsx       one GSAP ScrollTrigger controller for the page
+  WistiaPlayer.tsx        video embed with an iframe fallback
   PayButton.tsx           Razorpay checkout
-  ...                     one file per section
 lib/
   config.ts               price, seats, contact, video id, tracking ids
   content.ts              all page copy and structured content
@@ -93,8 +96,8 @@ component edits needed.
 - `offer.seatsLeft` / `offer.cohortSeats` — keep these honest and update them
   as the cohort fills.
 - `site.phone`, `site.email`, `site.whatsapp`.
-- `lib/content.ts` — headline claims, the five domains, stages, FAQs,
-  testimonials.
+- `lib/content.ts` — the five domains, the three steps, and the objection
+  cards on the briefing page.
 
 ## Wiring up the integrations
 

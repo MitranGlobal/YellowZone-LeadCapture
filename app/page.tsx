@@ -1,13 +1,7 @@
 import Nav from '@/components/Nav';
 import Hero from '@/components/Hero';
-import StatBand from '@/components/StatBand';
-import LedgerSection from '@/components/LedgerSection';
-import StandardSection from '@/components/StandardSection';
-import FrameworkSection from '@/components/FrameworkSection';
-import PathSection from '@/components/PathSection';
-import FitSection from '@/components/FitSection';
-import ProofSection from '@/components/ProofSection';
-import FaqSection from '@/components/FaqSection';
+import MeasureSection from '@/components/MeasureSection';
+import StepsSection from '@/components/StepsSection';
 import FinalCta from '@/components/FinalCta';
 import Footer from '@/components/Footer';
 import StickyCta from '@/components/StickyCta';
@@ -21,14 +15,8 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
-        <StatBand />
-        <LedgerSection />
-        <StandardSection />
-        <FrameworkSection />
-        <PathSection />
-        <FitSection />
-        <ProofSection />
-        <FaqSection />
+        <MeasureSection />
+        <StepsSection />
         <FinalCta />
       </main>
       <Footer />

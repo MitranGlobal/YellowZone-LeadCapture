@@ -40,23 +40,14 @@ const config: Config = {
         card: '0 1px 0 0 rgba(12,58,102,0.08), 0 18px 40px -28px rgba(12,58,102,0.45)',
         raised: '0 24px 60px -30px rgba(8,39,68,0.75)',
       },
-      backgroundImage: {
-        'rule-gold':
-          'repeating-linear-gradient(90deg, #E8A317 0 8px, transparent 8px 14px)',
-      },
       keyframes: {
         drift: {
           '0%,100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-8px)' },
         },
-        marquee: {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-50%)' },
-        },
       },
       animation: {
         drift: 'drift 7s ease-in-out infinite',
-        marquee: 'marquee 38s linear infinite',
       },
     },
   },
