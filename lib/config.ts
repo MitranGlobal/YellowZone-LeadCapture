@@ -4,11 +4,46 @@
  * Nothing else in the codebase should hard-code these values.
  */
 
+const FALLBACK_URL = 'https://schools.mitranglobal.com';
+
+/**
+ * Resolves the canonical site URL defensively.
+ *
+ * `metadataBase: new URL(...)` throws at build time on a malformed value, and
+ * the most common way to fill NEXT_PUBLIC_SITE_URL in a hosting dashboard is
+ * to paste a bare domain with no scheme. So: add a missing scheme, drop a
+ * trailing slash, fall back to the Vercel-provided host, and never let a bad
+ * value take the build down.
+ */
+function resolveSiteUrl(): string {
+  const candidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    process.env.VERCEL_URL,
+  ];
+
+  for (const raw of candidates) {
+    const value = raw?.trim();
+    if (!value) continue;
+
+    const withScheme = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+    try {
+      const url = new URL(withScheme);
+      if (!url.hostname.includes('.')) continue;
+      return url.origin;
+    } catch {
+      // Malformed entry — try the next candidate.
+    }
+  }
+
+  return FALLBACK_URL;
+}
+
 export const site = {
   name: 'Yellow Zone for Schools',
   org: 'MiTran Global',
   tagline: 'Every child has the right to feel #positive',
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://schools.mitranglobal.com',
+  url: resolveSiteUrl(),
   email: 'counselmitranglobal@gmail.com',
   phone: '+91 74832 59966',
   phoneHref: 'tel:+917483259966',

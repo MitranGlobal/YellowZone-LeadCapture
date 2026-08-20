@@ -3,8 +3,12 @@
 import Script from 'next/script';
 import { video } from '@/lib/config';
 
-// The <wistia-player> custom element is not in React's JSX namespace.
-declare global {
+/**
+ * <wistia-player> is a custom element, so React needs to be told it exists.
+ * Declared on `react`'s own JSX namespace rather than the global one, which
+ * is where React 19's types moved it — this form works on React 18 and 19.
+ */
+declare module 'react' {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {

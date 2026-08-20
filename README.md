@@ -11,9 +11,9 @@ submitting their details.
 
 | Layer | Choice |
 | --- | --- |
-| Framework | Next.js 14, App Router, TypeScript |
+| Framework | Next.js 16, App Router, TypeScript |
 | Styling | Tailwind CSS v3 |
-| 3D | Three.js + React Three Fiber (`@react-three/drei`) |
+| 3D | Three.js + React Three Fiber (core only, no drei) |
 | Motion | Framer Motion (UI + lightbox), GSAP ScrollTrigger (scroll reveals) |
 | State | Zustand (lightbox / lead state) |
 | Video | Wistia embed |
@@ -32,7 +32,28 @@ npm run dev                  # http://localhost:3000
 npm run build && npm start   # production build
 ```
 
-Node 18.17+ required (Node 20 LTS recommended).
+Node 20.9+ required (Node 22 LTS recommended — see `.nvmrc`).
+
+## Dependency and security notes
+
+This project was specced on Next.js 14. It now runs **Next.js 16 with React 19**,
+because Next 14 cannot be made vulnerability-free: the latest Next 14 release
+(14.2.35) still carries ~20 open advisories, and Next 15.5.x still carries 3.
+Only 16.x audits clean. `npm audit` on this tree reports **0 vulnerabilities**.
+
+`@react-three/drei` was also removed. Every 9.x release of drei pins the
+deprecated `three-mesh-bvh@0.7.8`, and the only two helpers this project used
+from it (`useTexture`, `ContactShadows`) are a few lines of three.js each. They
+are now implemented directly in `components/SealMedallion.tsx`. This dropped the
+dependency tree from roughly 400 packages to 133 and removed the deprecation
+warning at its source.
+
+If you must return to Next 14, pin `next` to `14.2.35`, `react`/`react-dom` to
+`^18.3.1`, `@react-three/fiber` to `^8.18.0` and `framer-motion` to `^11.18.2`,
+then delete `package-lock.json` and reinstall. The application code is
+compatible with both; only the JSX namespace declaration in
+`components/WistiaPlayer.tsx` is version-sensitive, and the form used there
+works on React 18 and 19 alike.
 
 ## Project map
 
@@ -130,6 +151,11 @@ Commit `.env.example`, never `.env.local`.
    in your DNS.
 5. Re-deploy after adding or changing environment variables — Next.js inlines
    `NEXT_PUBLIC_*` values at build time.
+
+`NEXT_PUBLIC_SITE_URL` accepts a bare domain or a full URL — `lib/config.ts`
+normalises it and falls back to the Vercel-provided host, so a missing scheme
+cannot break the build. Set Node to 20.x or 22.x under **Settings → General →
+Node.js Version** if it is not already.
 
 CLI alternative:
 

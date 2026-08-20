@@ -2,6 +2,9 @@
   "name": "yellow-zone-schools",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,24 +12,23 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@react-three/drei": "^9.114.0",
-    "@react-three/fiber": "^8.17.10",
-    "framer-motion": "^11.11.9",
-    "gsap": "^3.12.5",
-    "next": "14.2.15",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "@react-three/fiber": "^9.3.0",
+    "framer-motion": "^12.23.12",
+    "gsap": "^3.13.0",
+    "next": "16.3.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "three": "^0.169.0",
-    "zustand": "^4.5.5"
+    "zustand": "^4.5.7"
   },
   "devDependencies": {
-    "@types/node": "^20.16.11",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.0",
+    "@types/node": "^20.19.9",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
     "@types/three": "^0.169.0",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.6.3"
   }
 }
