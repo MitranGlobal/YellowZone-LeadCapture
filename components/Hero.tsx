@@ -52,11 +52,11 @@ export default function Hero() {
             className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
           >
             <CtaButton source="hero" className="w-full sm:w-auto">
-              Apply for a readiness audit
+              Apply now
             </CtaButton>
-            <span className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-white/45">
-              {offer.seatsLeft} of {offer.cohortSeats} places left
-            </span>
+            <CtaButton source="hero" variant="ghost-invert" className="w-full sm:w-auto">
+              Learn more
+            </CtaButton>
           </motion.div>
         </motion.div>
 

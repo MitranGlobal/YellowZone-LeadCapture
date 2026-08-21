@@ -26,7 +26,7 @@ export default function StepsSection() {
         </ol>
 
         <div className="mt-9" data-reveal>
-          <CtaButton source="framework">Apply for a readiness audit</CtaButton>
+          <CtaButton source="framework">Apply now</CtaButton>
         </div>
       </div>
     </section>

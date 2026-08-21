@@ -13,7 +13,7 @@ export default function FinalCta() {
           {offer.cohortName}.
         </p>
         <div className="mt-7">
-          <CtaButton source="final">Apply for a readiness audit</CtaButton>
+          <CtaButton source="final">Apply now</CtaButton>
         </div>
         <p className="mt-6 text-[0.85rem] text-white/45">
           Or call{' '}

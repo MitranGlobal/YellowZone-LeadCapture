@@ -97,32 +97,18 @@ export const video = {
     'https://counselmitranglobal.wistia.com/s/b2ag5xkznld3bqt',
 } as const;
 
-export const calendly = {
+export const tally = {
   /**
-   * Your Calendly event URL, e.g.
-   * https://calendly.com/mitranglobal/campus-readiness-audit
+   * Tally embed URL. The form carries both the application questions and the
+   * appointment slot, so it is the only conversion point in the funnel.
+   * dynamicHeight lets Tally's script resize the iframe as the form grows.
    */
-  url:
-    process.env.NEXT_PUBLIC_CALENDLY_URL ??
-    'https://calendly.com/counselmitranglobal/yellow-zone-schools?hide_event_type_details=1&hide_gdpr_banner=1',
+  src:
+    process.env.NEXT_PUBLIC_TALLY_SRC ??
+    'https://tally.so/embed/WOadLk?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1',
 } as const;
 
 export const tracking = {
   gtmId: process.env.NEXT_PUBLIC_GTM_ID ?? '',
   metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID ?? '',
 } as const;
-
-export type LeadPayload = {
-  schoolName: string;
-  contactName: string;
-  role: string;
-  phone: string;
-  email: string;
-  city: string;
-  strength: string;
-  board: string;
-  source?: string;
-};
-
-/** Key used to hand the submitted form to the briefing page for prefill. */
-export const LEAD_STORAGE_KEY = 'yz_lead';

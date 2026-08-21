@@ -1,25 +1,26 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
-import { useLightbox } from '@/lib/store';
+import Link from 'next/link';
 
 type Props = {
-  source: 'nav' | 'hero' | 'framework' | 'path' | 'final' | 'sticky';
+  /** Which CTA was clicked — kept as a data attribute for analytics. */
+  source: 'nav' | 'hero' | 'framework' | 'final' | 'sticky';
   children: React.ReactNode;
   variant?: 'primary' | 'ghost' | 'ghost-invert';
   className?: string;
 };
 
+/**
+ * Every CTA on the landing page is a plain link to the briefing page. No
+ * modal, no interstitial: the visitor goes straight to the video and the
+ * application form beneath it. A link also means middle-click, long-press
+ * and "open in new tab" all behave the way people expect, which a button
+ * dressed up as navigation never does.
+ */
 export default function CtaButton({
   source,
   children,
   variant = 'primary',
   className = '',
 }: Props) {
-  const open = useLightbox((s) => s.open);
-  const hasSubmitted = useLightbox((s) => s.hasSubmitted);
-  const router = useRouter();
-
   const cls =
     variant === 'primary'
       ? 'btn-primary'
@@ -28,16 +29,8 @@ export default function CtaButton({
         : 'btn-ghost-invert';
 
   return (
-    <button
-      type="button"
-      className={`${cls} ${className}`}
-      onClick={() => {
-        // A lead who has already given their details should never be asked twice.
-        if (hasSubmitted) router.push('/briefing');
-        else open(source);
-      }}
-    >
+    <Link href="/briefing" data-cta={source} className={`${cls} ${className}`}>
       {children}
-    </button>
+    </Link>
   );
 }

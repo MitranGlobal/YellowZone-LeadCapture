@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import WistiaPlayer from '@/components/WistiaPlayer';
-import CalendlyEmbed from '@/components/CalendlyEmbed';
+import TallyEmbed from '@/components/TallyEmbed';
 import ScrollReveals from '@/components/ScrollReveals';
 import Footer from '@/components/Footer';
 import { gates } from '@/lib/content';
@@ -40,12 +40,12 @@ export default function BriefingPage() {
           </div>
         </section>
 
-        <section id="book" className="border-t border-white/10 px-5 py-12 sm:px-8">
+        <section id="apply" className="border-t border-white/10 px-5 py-12 sm:px-8">
           <div className="wrap">
             <div className="mx-auto max-w-3xl text-center" data-reveal>
-              <p className="eyebrow text-gold">No payment · Free</p>
+              <p className="eyebrow text-gold">Free · No payment</p>
               <h2 className="h2 mt-4 text-balance text-white">
-                Pick a time for your {offer.name.toLowerCase()}
+                Apply and pick your time
               </h2>
               <p className="mt-3 text-[0.95rem] text-white/65">
                 60 minutes with our assessment team, on campus or over video.
@@ -53,8 +53,10 @@ export default function BriefingPage() {
               </p>
             </div>
 
-            <div className="mx-auto mt-8 max-w-4xl">
-              <CalendlyEmbed />
+            {/* Tally form is light-on-white; it gets its own panel rather than
+                sitting transparent on the navy ground, where it is unreadable. */}
+            <div className="mx-auto mt-8 max-w-3xl rounded-sm bg-parchment p-4 shadow-raised sm:p-6">
+              <TallyEmbed />
             </div>
           </div>
         </section>

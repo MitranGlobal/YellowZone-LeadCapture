@@ -5,7 +5,6 @@ import StepsSection from '@/components/StepsSection';
 import FinalCta from '@/components/FinalCta';
 import Footer from '@/components/Footer';
 import StickyCta from '@/components/StickyCta';
-import LeadModal from '@/components/LeadModal';
 import ScrollReveals from '@/components/ScrollReveals';
 
 export default function Page() {
@@ -21,7 +20,6 @@ export default function Page() {
       </main>
       <Footer />
       <StickyCta />
-      <LeadModal />
     </>
   );
 }

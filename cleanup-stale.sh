@@ -11,8 +11,8 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-KEEP="CalendlyEmbed CtaButton FinalCta Footer Hero LeadModal MeasureSection Nav \
-ScrollReveals SealMedallion StepsSection StickyCta WistiaPlayer"
+KEEP="CtaButton FinalCta Footer Hero MeasureSection Nav ScrollReveals \
+SealMedallion StepsSection StickyCta TallyEmbed WistiaPlayer"
 
 removed=0
 for file in components/*.tsx; do

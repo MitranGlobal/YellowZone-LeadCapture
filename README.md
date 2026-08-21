@@ -15,10 +15,8 @@ submitting their details.
 | Styling | Tailwind CSS v3 |
 | 3D | Three.js + React Three Fiber (core only, no drei) |
 | Motion | Framer Motion (UI + lightbox), GSAP ScrollTrigger (scroll reveals) |
-| State | Zustand (lightbox / lead state) |
 | Video | Wistia embed |
-| Scheduling | Calendly inline embed |
-| Email | Resend REST API (webhook fallback) |
+| Form + scheduling | Tally embed |
 | Hosting | Vercel |
 
 ## Upgrading over an older copy
@@ -89,22 +87,18 @@ app/
   briefing/page.tsx       video page (noindex) — Wistia + offer + payment
   thank-you/page.tsx      post-payment confirmation
   privacy-policy/, terms/ legal pages
-  api/lead/               receives the form, emails you the enquiry
-  api/booking/            emails you the form answers + confirmed appointment
 components/
   Hero.tsx                hero copy + 3D medallion
   SealMedallion.tsx       the R3F certification medallion
   MeasureSection.tsx      the five scored domains
   StepsSection.tsx        three-step route to certification
   FinalCta.tsx, Nav.tsx, Footer.tsx, StickyCta.tsx
-  LeadModal.tsx           Framer Motion lead lightbox
   ScrollReveals.tsx       one GSAP ScrollTrigger controller for the page
   WistiaPlayer.tsx        video embed with an iframe fallback
-  CalendlyEmbed.tsx       scheduling embed, prefill + booking callback
+  TallyEmbed.tsx          application form + slot, fires the submit pixel
 lib/
   config.ts               price, seats, contact, video id, tracking ids
   content.ts              all page copy and structured content
-  store.ts                Zustand lightbox store
 public/
   seal.png                seal texture used by the 3D medallion
   logo.png, og.png, favicon.svg
@@ -131,25 +125,19 @@ still accepts leads and logs them server-side, so the funnel is never blocked.
 **Video.** The briefing uses Wistia media id `kudy2kfy6c`. Change it with
 `NEXT_PUBLIC_WISTIA_MEDIA_ID` — no code change.
 
-**Scheduling.** Set `NEXT_PUBLIC_CALENDLY_URL` to your event URL. The embed
-prefills the visitor's name and email from the form they just filled, and
-passes the school details as custom answer `a1` — add one free-text question
-to your Calendly event so that answer has somewhere to land. When the booking
-completes, Calendly posts `calendly.event_scheduled` to the page, which sends
-the combined email and forwards to `/thank-you`.
+**Application form.** `NEXT_PUBLIC_TALLY_SRC` points at the Tally embed, which
+carries both the application questions and the appointment slot. It is the only
+conversion point in the funnel — every CTA on the landing page is a plain link
+to `/briefing`, where the video sits above the form.
 
-**Email.** Set `RESEND_API_KEY` and `NOTIFY_EMAIL`. Two emails are sent: one
-on form submit (so a school that never books is still a lead) and one on
-booking, carrying the form answers plus the appointment reference. Until your
-domain is verified in Resend, leave `NOTIFY_FROM` as the `onboarding@resend.dev`
-default. With no key set, delivery falls back to `LEAD_WEBHOOK_URL`, and with
-neither it logs — the funnel never breaks on a missing integration.
+Turn on **Tally → Settings → Notifications** so submissions reach your inbox.
+The site holds no form state and sends no email of its own; Tally owns both.
 
 There is no payment step anywhere in this funnel.
 
 **Tracking.** `NEXT_PUBLIC_GTM_ID` and `NEXT_PUBLIC_META_PIXEL_ID`. The site
-fires `Lead` on form submit and `Schedule` on confirmed booking, both to
-`dataLayer` and `fbq`. For Meta ad traffic, use `/briefing` as your custom
+fires `Schedule` to `fbq` and `application_submitted` to `dataLayer` when Tally
+reports a submission, then forwards to `/thank-you`. For Meta ad traffic, use `/briefing` as your custom
 conversion page and keep it excluded from indexing (already set).
 
 ## Push to git
