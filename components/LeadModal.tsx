@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLightbox } from '@/lib/store';
-import { offer } from '@/lib/config';
+import { offer, LEAD_STORAGE_KEY } from '@/lib/config';
 
 const ROLES = [
   'Principal',
@@ -75,6 +75,14 @@ export default function LeadModal() {
         body: JSON.stringify({ ...data, source }),
       });
       if (!res.ok) throw new Error('lead-failed');
+
+      // Hand the answers to the briefing page so Calendly can be prefilled
+      // and the booking email can carry the school's details.
+      try {
+        sessionStorage.setItem(LEAD_STORAGE_KEY, JSON.stringify(data));
+      } catch {
+        // Private mode: the calendar still works, just unprefilled.
+      }
 
       if (typeof window !== 'undefined') {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -147,7 +155,7 @@ export default function LeadModal() {
                 <p className="mt-2 text-[0.92rem] leading-relaxed text-white/70">
                   This takes under a minute. You will go straight to the{' '}
                   {offer.briefingMinutes}-minute assessment briefing, then
-                  decide whether to book the {offer.name.toLowerCase()}.
+                  pick a time for your {offer.name.toLowerCase()}.
                 </p>
               </div>
 
@@ -215,7 +223,7 @@ export default function LeadModal() {
                 </button>
 
                 <p className="mt-3 text-center font-mono text-[0.68rem] uppercase tracking-[0.14em] text-ink/45">
-                  No payment at this step
+                  Free · No payment at any stage
                 </p>
               </form>
             </motion.div>

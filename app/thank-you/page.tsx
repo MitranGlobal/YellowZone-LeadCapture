@@ -1,18 +1,17 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
 import { offer, site } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'Booking confirmed — Yellow Zone for Schools',
+  title: 'Appointment confirmed — Yellow Zone for Schools',
   robots: { index: false, follow: false },
 };
 
 const next = [
-  'Our team calls you within one working day to fix a time that suits your leadership group.',
-  `The ${offer.name.toLowerCase()} runs for about 60 minutes, on campus or over video.`,
-  'You receive your findings summary within 48 hours of the session, whether or not you proceed.',
+  'A calendar invite is on its way to the email you booked with.',
+  `The ${offer.name.toLowerCase()} runs about 60 minutes, on campus or over video.`,
+  'You get your findings summary within 48 hours of the session.',
 ];
 
 export default function ThankYouPage() {
@@ -20,16 +19,11 @@ export default function ThankYouPage() {
     <>
       <main className="ground-ink flex min-h-[80vh] items-center px-5 py-20 text-white sm:px-8">
         <div className="wrap mx-auto max-w-2xl text-center">
-          <Image
-            src="/seal.png"
-            alt=""
-            width={96}
-            height={96}
-            className="mx-auto h-20 w-20"
-          />
-          <p className="eyebrow mt-7 text-gold">Payment received</p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/seal.png" alt="" width={96} height={96} className="mx-auto h-20 w-20" />
+          <p className="eyebrow mt-7 text-gold">Appointment confirmed</p>
           <h1 className="h2 mt-4 text-balance text-white">
-            Your campus place in the {offer.cohortName} is held.
+            Your slot in the {offer.cohortName} is booked.
           </h1>
 
           <ol className="mt-9 space-y-px border border-white/12 bg-white/12 text-left">
@@ -38,9 +32,7 @@ export default function ThankYouPage() {
                 <span className="font-mono text-[0.8rem] text-gold">
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <span className="text-[0.94rem] leading-relaxed text-white/75">
-                  {n}
-                </span>
+                <span className="text-[0.94rem] leading-relaxed text-white/75">{n}</span>
               </li>
             ))}
           </ol>

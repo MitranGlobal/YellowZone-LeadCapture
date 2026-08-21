@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
+import Footer from '@/components/Footer';
 import { offer, site } from '@/lib/config';
 
 export const metadata: Metadata = {
@@ -15,27 +15,25 @@ export default function TermsPage() {
           <Link href="/" className="eyebrow text-gold-deep hover:underline">
             ← Yellow Zone for Schools
           </Link>
-          <h1 className="h2 mt-6">Terms and refunds</h1>
+          <h1 className="h2 mt-6">Terms</h1>
 
           <div className="mt-9 space-y-7 text-[0.95rem] leading-relaxed text-ink/75">
             <section>
               <h2 className="h3 text-ink">What you are booking</h2>
               <p className="mt-3">
-                The {offer.priceLabel} fee books a {offer.name.toLowerCase()}: a
-                structured review session with our assessment team. It is not
-                payment for certification, and it does not guarantee that your
-                school will be accepted into the cohort or certified.
+                The {offer.name.toLowerCase()} is a free structured review
+                session with our assessment team. There is no charge at any
+                stage of this process. Booking a session does not guarantee that
+                your school will be accepted into the cohort or certified.
               </p>
             </section>
 
             <section>
-              <h2 className="h3 text-ink">Refunds</h2>
+              <h2 className="h3 text-ink">Rescheduling</h2>
               <p className="mt-3">
-                If we conclude after the audit that Yellow Zone is not right for
-                your campus at this time, the fee is refunded in full to the
-                original payment method within seven working days. If you cancel
-                before the session takes place, the fee is refunded in full. The
-                fee is adjusted against your certification cost if you proceed.
+                Reschedule or cancel using the link in your calendar invite, or
+                write to us. We ask for reasonable notice so the slot can go to
+                another school.
               </p>
             </section>
 

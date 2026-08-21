@@ -17,21 +17,33 @@ submitting their details.
 | Motion | Framer Motion (UI + lightbox), GSAP ScrollTrigger (scroll reveals) |
 | State | Zustand (lightbox / lead state) |
 | Video | Wistia embed |
-| Payments | Razorpay Checkout (with hosted-link fallback) |
+| Scheduling | Calendly inline embed |
+| Email | Resend REST API (webhook fallback) |
 | Hosting | Vercel |
 
 ## Upgrading over an older copy
 
-If you unzip this release on top of a previous copy of the project, delete the
-components that no longer exist — unzipping overwrites files but never removes
-them, and the leftovers still import content exports that were deleted, which
-fails the type check:
+If you unzip this release on top of a previous copy, delete the components that
+no longer exist first. Unzipping overwrites files but never removes ones that
+were cut, and the leftovers still import content exports that were deleted —
+which fails the type check with `TS2305: has no exported member`.
 
 ```bash
-./cleanup-stale.sh     # or: git rm the seven files, or just use a clean folder
+bash cleanup-stale.sh
 ```
 
-A fresh `git clone` or unzipping into an empty directory needs none of this.
+It works off a whitelist of the 13 components this release ships, so it clears
+anything stale no matter which older version you came from. If the stale files
+were committed to git it removes them from the index too — deleting them only
+on disk is not enough, because CI builds what is in the repository:
+
+```bash
+git commit -m "Remove components cut in content trim" && git push
+```
+
+Check with `git ls-files components/` — it should list exactly 13 files.
+
+A fresh clone, or unzipping into an empty directory, needs none of this.
 
 ## Run it locally
 
@@ -77,9 +89,8 @@ app/
   briefing/page.tsx       video page (noindex) — Wistia + offer + payment
   thank-you/page.tsx      post-payment confirmation
   privacy-policy/, terms/ legal pages
-  api/lead/               receives the form, forwards to your CRM webhook
-  api/payment/order/      creates a Razorpay order
-  api/payment/verify/     verifies the payment signature server-side
+  api/lead/               receives the form, emails you the enquiry
+  api/booking/            emails you the form answers + confirmed appointment
 components/
   Hero.tsx                hero copy + 3D medallion
   SealMedallion.tsx       the R3F certification medallion
@@ -89,7 +100,7 @@ components/
   LeadModal.tsx           Framer Motion lead lightbox
   ScrollReveals.tsx       one GSAP ScrollTrigger controller for the page
   WistiaPlayer.tsx        video embed with an iframe fallback
-  PayButton.tsx           Razorpay checkout
+  CalendlyEmbed.tsx       scheduling embed, prefill + booking callback
 lib/
   config.ts               price, seats, contact, video id, tracking ids
   content.ts              all page copy and structured content
@@ -104,8 +115,6 @@ public/
 Everything below lives in **`lib/config.ts`** and **`lib/content.ts`** — no
 component edits needed.
 
-- `offer.price` / `offer.priceLabel` — the audit fee (currently ₹999). The
-  API route converts to paise automatically.
 - `offer.seatsLeft` / `offer.cohortSeats` — keep these honest and update them
   as the cohort fills.
 - `site.phone`, `site.email`, `site.whatsapp`.
@@ -122,14 +131,24 @@ still accepts leads and logs them server-side, so the funnel is never blocked.
 **Video.** The briefing uses Wistia media id `kudy2kfy6c`. Change it with
 `NEXT_PUBLIC_WISTIA_MEDIA_ID` — no code change.
 
-**Payments.** Add `NEXT_PUBLIC_RAZORPAY_KEY_ID`, `RAZORPAY_KEY_ID` and
-`RAZORPAY_KEY_SECRET`. Checkout opens in-page, the signature is verified in
-`/api/payment/verify`, and the visitor lands on `/thank-you`. If no key is
-set the button falls back to `NEXT_PUBLIC_PAYMENT_LINK` (a Razorpay Payment
-Page or similar), so you can go live before the gateway is approved.
+**Scheduling.** Set `NEXT_PUBLIC_CALENDLY_URL` to your event URL. The embed
+prefills the visitor's name and email from the form they just filled, and
+passes the school details as custom answer `a1` — add one free-text question
+to your Calendly event so that answer has somewhere to land. When the booking
+completes, Calendly posts `calendly.event_scheduled` to the page, which sends
+the combined email and forwards to `/thank-you`.
+
+**Email.** Set `RESEND_API_KEY` and `NOTIFY_EMAIL`. Two emails are sent: one
+on form submit (so a school that never books is still a lead) and one on
+booking, carrying the form answers plus the appointment reference. Until your
+domain is verified in Resend, leave `NOTIFY_FROM` as the `onboarding@resend.dev`
+default. With no key set, delivery falls back to `LEAD_WEBHOOK_URL`, and with
+neither it logs — the funnel never breaks on a missing integration.
+
+There is no payment step anywhere in this funnel.
 
 **Tracking.** `NEXT_PUBLIC_GTM_ID` and `NEXT_PUBLIC_META_PIXEL_ID`. The site
-fires `Lead` on form submit and `Purchase` on verified payment, both to
+fires `Lead` on form submit and `Schedule` on confirmed booking, both to
 `dataLayer` and `fbq`. For Meta ad traffic, use `/briefing` as your custom
 conversion page and keep it excluded from indexing (already set).
 

@@ -55,9 +55,11 @@ export default function PrivacyPage() {
             <section>
               <h2 className="h3 text-ink">Who else sees it</h2>
               <p className="mt-3">
-                Our CRM, email, analytics and payment providers process this
-                data on our behalf under their own terms. Payments are handled by
-                our payment gateway; we never see or store your card details.
+                Our email, analytics and scheduling providers process this data
+                on our behalf under their own terms. Appointments are booked
+                through Calendly, which receives the name and email address you
+                book with. There is no payment step and we never collect payment
+                details.
               </p>
             </section>
 

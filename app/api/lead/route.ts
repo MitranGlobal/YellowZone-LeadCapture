@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
+import { notify } from '@/lib/notify';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 /**
- * Receives the campus details captured in the lightbox and forwards them to
- * whatever CRM the team is using. Set LEAD_WEBHOOK_URL to a GoHighLevel /
- * Zapier / Make inbound webhook. Without it the lead is still accepted and
- * logged so the funnel never blocks on integration work.
+ * Receives the campus details captured in the lightbox and emails them
+ * straight away, so a school that watches the video but never books is still
+ * a lead you can follow up. A second, richer email follows from /api/booking
+ * if they do book.
  */
 export async function POST(request: Request) {
   let body: Record<string, string>;
@@ -21,39 +22,31 @@ export async function POST(request: Request) {
   const required = ['schoolName', 'contactName', 'phone', 'email', 'city'];
   const missing = required.filter((k) => !body[k]?.trim());
   if (missing.length) {
-    return NextResponse.json(
-      { error: `Missing: ${missing.join(', ')}` },
-      { status: 422 },
-    );
+    return NextResponse.json({ error: `Missing: ${missing.join(', ')}` }, { status: 422 });
   }
 
-  const lead = {
+  const lead: Record<string, string> = {
     ...body,
     phone: body.phone.replace(/\D/g, '').slice(-10),
     submittedAt: new Date().toISOString(),
-    userAgent: request.headers.get('user-agent') ?? '',
     referer: request.headers.get('referer') ?? '',
   };
 
-  const webhook = process.env.LEAD_WEBHOOK_URL;
-
-  if (webhook) {
-    try {
-      const res = await fetch(webhook, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(lead),
-      });
-      if (!res.ok) {
-        console.error('Lead webhook rejected the lead', res.status);
-      }
-    } catch (err) {
-      // Never fail the visitor's submission because a downstream tool is down.
-      console.error('Lead webhook unreachable', err);
-    }
-  } else {
-    console.info('Lead captured (no LEAD_WEBHOOK_URL configured)', lead);
-  }
+  await notify({
+    subject: `New enquiry — ${lead.schoolName}`,
+    rows: [
+      ['School', lead.schoolName],
+      ['Contact', lead.contactName],
+      ['Role', lead.role ?? ''],
+      ['Phone', lead.phone],
+      ['Email', lead.email],
+      ['City', lead.city],
+      ['Students', lead.strength ?? ''],
+      ['Board', lead.board ?? ''],
+      ['Came from', lead.source ?? ''],
+    ],
+    payload: { ...lead, type: 'lead' },
+  });
 
   return NextResponse.json({ ok: true });
 }

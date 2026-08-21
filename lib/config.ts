@@ -1,6 +1,6 @@
 /**
  * Single source of truth for anything the marketing team changes often:
- * price, seat count, contact details, video id, tracking ids.
+ * scheduling link, seat count, contact details, video id, tracking ids.
  * Nothing else in the codebase should hard-code these values.
  */
 
@@ -25,7 +25,6 @@ function resolveSiteUrl(): string {
   for (const raw of candidates) {
     const value = raw?.trim();
     if (!value) continue;
-
     const withScheme = /^https?:\/\//i.test(value) ? value : `https://${value}`;
     try {
       const url = new URL(withScheme);
@@ -51,40 +50,33 @@ export const site = {
 } as const;
 
 export const offer = {
-  /** What the school books on the briefing page. */
+  /** What the school books on the briefing page. Free — no payment step. */
   name: 'Campus Readiness Audit',
-  /** Amount in rupees. Paise conversion happens in the payment route. */
-  price: 999,
-  priceLabel: '₹999',
-  /** Shown struck through next to the price. Set to null to hide. */
-  anchorLabel: '₹15,000',
   /** Cohort scarcity — keep this honest and update it when it changes. */
   cohortSeats: 12,
   seatsLeft: 5,
   cohortName: 'Founding Cohort 2026',
-  refundWindowLabel: 'Full refund if we decline your campus',
   briefingMinutes: 14,
 } as const;
 
 export const video = {
   /** Wistia media id for the briefing video. */
   mediaId: process.env.NEXT_PUBLIC_WISTIA_MEDIA_ID ?? 'kudy2kfy6c',
-  aspect: 1.7777777777777777,
+} as const;
+
+export const calendly = {
+  /**
+   * Your Calendly event URL, e.g.
+   * https://calendly.com/mitranglobal/campus-readiness-audit
+   */
+  url:
+    process.env.NEXT_PUBLIC_CALENDLY_URL ??
+    'https://calendly.com/mitranglobal/campus-readiness-audit',
 } as const;
 
 export const tracking = {
   gtmId: process.env.NEXT_PUBLIC_GTM_ID ?? '',
   metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID ?? '',
-} as const;
-
-export const payment = {
-  /**
-   * When a Razorpay key is present the site opens Razorpay Checkout.
-   * When it is not, the primary button falls back to this hosted
-   * payment link so the funnel is never dead.
-   */
-  razorpayKeyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? '',
-  fallbackLink: process.env.NEXT_PUBLIC_PAYMENT_LINK ?? '',
 } as const;
 
 export type LeadPayload = {
@@ -98,3 +90,6 @@ export type LeadPayload = {
   board: string;
   source?: string;
 };
+
+/** Key used to hand the submitted form to the briefing page for prefill. */
+export const LEAD_STORAGE_KEY = 'yz_lead';

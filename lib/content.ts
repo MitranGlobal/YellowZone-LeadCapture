@@ -26,11 +26,11 @@ export const gates = [
     body: 'We take campuses where leadership can act on what the assessment finds.',
   },
   {
-    title: 'Not the right fit? Refunded',
-    body: 'If we conclude this is not right for your campus, your fee is returned immediately.',
+    title: 'The audit is free',
+    body: 'No payment at any stage of this process. You leave with findings either way.',
   },
   {
-    title: 'Adjusted against certification',
-    body: 'The audit fee comes off your certification cost if you go ahead.',
+    title: 'You keep the findings',
+    body: 'Whether or not you go ahead with certification, the gap map is yours.',
   },
 ];

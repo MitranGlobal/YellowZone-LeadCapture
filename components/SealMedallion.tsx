@@ -23,42 +23,6 @@ const GOLD_DEEP = '#B9770E';
 const DIE_RADIUS = 1.34;
 const FACE_RADIUS = DIE_RADIUS / 0.916;
 
-/** Soft elliptical shadow beneath the medallion, as a radial gradient. */
-function ContactShadow() {
-  const texture = useMemo(() => {
-    const size = 256;
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      const g = ctx.createRadialGradient(
-        size / 2,
-        size / 2,
-        0,
-        size / 2,
-        size / 2,
-        size / 2,
-      );
-      g.addColorStop(0, 'rgba(4,28,51,0.42)');
-      g.addColorStop(0.55, 'rgba(4,28,51,0.16)');
-      g.addColorStop(1, 'rgba(4,28,51,0)');
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, size, size);
-    }
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    return tex;
-  }, []);
-
-  return (
-    <mesh position={[0, -1.72, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeGeometry args={[6.4, 6.4]} />
-      <meshBasicMaterial map={texture} transparent depthWrite={false} />
-    </mesh>
-  );
-}
-
 function Medallion({ reduced }: { reduced: boolean }) {
   const group = useRef<THREE.Group>(null);
   const sweep = useRef<THREE.PointLight>(null);
@@ -165,7 +129,6 @@ export default function SealMedallion() {
       <directionalLight position={[5, -3, 2]} intensity={0.8} color="#E8A317" />
       <Suspense fallback={null}>
         <Medallion reduced={reduced} />
-        <ContactShadow />
       </Suspense>
     </Canvas>
   );
