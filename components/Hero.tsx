@@ -49,13 +49,10 @@ export default function Hero() {
           <motion.div
             variants={rise}
             transition={{ duration: 0.7 }}
-            className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
+            className="mt-8"
           >
             <CtaButton source="hero" className="w-full sm:w-auto">
               Apply now
-            </CtaButton>
-            <CtaButton source="hero" variant="ghost-invert" className="w-full sm:w-auto">
-              Learn more
             </CtaButton>
           </motion.div>
         </motion.div>

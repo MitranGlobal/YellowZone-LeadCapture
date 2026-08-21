@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const next = [
   'A calendar invite is on its way to the email you booked with.',
-  `The ${offer.name.toLowerCase()} runs about 60 minutes, on campus or over video.`,
+  `The ${offer.name.toLowerCase()} runs about 60 minutes, at your school.`,
   'You get your findings summary within 48 hours of the session.',
 ];
 

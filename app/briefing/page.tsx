@@ -48,8 +48,23 @@ export default function BriefingPage() {
                 Apply and pick your time
               </h2>
               <p className="mt-3 text-[0.95rem] text-white/65">
-                60 minutes with our assessment team, on campus or over video.
-                {' '}{offer.seatsLeft} of {offer.cohortSeats} places left.
+                A 60-minute session with our assessment team, at your school.
+              </p>
+            </div>
+
+            {/* Sits above the form, not below it: someone who fills this in
+                and then discovers they cannot host or attend has wasted their
+                time and ours. */}
+            <div
+              className="mx-auto mt-8 max-w-3xl border-l-2 border-gold bg-white/[0.06] px-5 py-4"
+              data-reveal
+            >
+              <p className="text-[0.92rem] leading-relaxed text-white/75">
+                <strong className="font-semibold text-gold">Please note:</strong>{' '}
+                This meeting will be conducted in person, on the school
+                premises, and we strongly recommend that an authoritative
+                decision-maker from the school complete this form and attend
+                the meeting.
               </p>
             </div>
 

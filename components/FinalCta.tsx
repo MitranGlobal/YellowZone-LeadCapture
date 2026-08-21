@@ -9,8 +9,7 @@ export default function FinalCta() {
           Find out where your campus actually stands.
         </h2>
         <p className="mt-4 text-white/70">
-          {offer.seatsLeft} of {offer.cohortSeats} places left in the{' '}
-          {offer.cohortName}.
+          Applications for the {offer.cohortName} are open.
         </p>
         <div className="mt-7">
           <CtaButton source="final">Apply now</CtaButton>

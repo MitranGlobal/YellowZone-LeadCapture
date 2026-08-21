@@ -24,10 +24,10 @@ export default function StickyCta() {
       <div className="flex items-center gap-3">
         <div className="min-w-0 flex-1">
           <p className="truncate font-mono text-[0.62rem] uppercase tracking-[0.14em] text-gold">
-            {offer.seatsLeft} of {offer.cohortSeats} places left
+            {offer.cohortName}
           </p>
           <p className="truncate text-[0.82rem] text-white/70">
-            {offer.cohortName}
+            Free campus readiness audit
           </p>
         </div>
         <CtaButton source="sticky" className="!px-5 !py-3 !text-[0.85rem]">

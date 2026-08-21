@@ -52,9 +52,6 @@ export const site = {
 export const offer = {
   /** What the school books on the briefing page. Free — no payment step. */
   name: 'Campus Readiness Audit',
-  /** Cohort scarcity — keep this honest and update it when it changes. */
-  cohortSeats: 12,
-  seatsLeft: 5,
   cohortName: 'Founding Cohort 2026',
   briefingMinutes: 14,
 } as const;
