@@ -26,23 +26,19 @@ export default function VimeoPlayer() {
 
   const src = `https://player.vimeo.com/video/${video.vimeoId}?${params.toString()}`;
 
+  // No frame, padding or background: the player sits directly on the page.
+  // Vimeo reports this video as 4:3, so the box is 75% of its width tall.
+  // Hard-coding 56.25% here would letterbox it with black bars.
   return (
-    <div className="border border-gold/35 bg-ink-deep p-1.5 shadow-raised sm:p-2">
-      {/* Vimeo reports this video as 4:3, so the box is 75% of its width tall.
-          Hard-coding 56.25% here would letterbox it with black bars. */}
-      <div
-        className="relative w-full"
-        style={{ paddingTop: video.aspectPadding }}
-      >
-        <iframe
-          src={src}
-          title="Yellow Zone — assessment briefing"
-          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          allowFullScreen
-          className="absolute inset-0 h-full w-full border-0"
-        />
-      </div>
+    <div className="relative w-full" style={{ paddingTop: video.aspectPadding }}>
+      <iframe
+        src={src}
+        title="Yellow Zone — assessment briefing"
+        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+        className="absolute inset-0 h-full w-full border-0"
+      />
     </div>
   );
 }
