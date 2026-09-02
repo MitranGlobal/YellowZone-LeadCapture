@@ -94,7 +94,7 @@ components/
   StepsSection.tsx        three-step route to certification
   FinalCta.tsx, Nav.tsx, Footer.tsx, StickyCta.tsx
   ScrollReveals.tsx       one GSAP ScrollTrigger controller for the page
-  WistiaPlayer.tsx        video embed with an iframe fallback
+  VimeoPlayer.tsx         Vimeo iframe embed
   TallyEmbed.tsx          application form + slot, fires the submit pixel
 lib/
   config.ts               price, seats, contact, video id, tracking ids
@@ -122,8 +122,18 @@ the URL in `LEAD_WEBHOOK_URL`. Every submission posts JSON with the school
 details, timestamp, user agent and referrer. Without the variable the site
 still accepts leads and logs them server-side, so the funnel is never blocked.
 
-**Video.** The briefing uses Wistia media id `kudy2kfy6c`. Change it with
-`NEXT_PUBLIC_WISTIA_MEDIA_ID` — no code change.
+**Video.** The briefing uses a Vimeo embed. Change the video with
+`NEXT_PUBLIC_VIMEO_ID`, and its shape with `NEXT_PUBLIC_VIDEO_ASPECT` (`75%`
+for 4:3, `56.25%` for 16:9) — no code change.
+
+Player appearance is set by URL parameters in `components/VimeoPlayer.tsx`,
+because an iframe's internals cannot be styled from the parent page. Currently
+set: title, byline and avatar hidden; scrubber in Yellow Zone gold; Vimeo
+tracking cookies off. The `color` parameter needs Vimeo Plus or above — on a
+free plan it is ignored and the scrubber stays Vimeo blue. Other useful
+parameters are `muted=1`, `loop=1`, `playsinline=1` and `controls=0`. Fully
+custom controls would mean loading Vimeo's player SDK and building the UI
+around it, which trades reliability for polish.
 
 **Application form.** `NEXT_PUBLIC_TALLY_SRC` points at the Tally embed, which
 carries both the application questions and the appointment slot. It is the only

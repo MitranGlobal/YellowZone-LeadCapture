@@ -5,7 +5,7 @@ export default function MeasureSection() {
     <section className="section ground-parchment" id="what">
       <div className="wrap">
         <h2 className="h2 max-w-2xl text-balance" data-reveal>
-          Five things we score. Every certified school is measured on all of them.
+          Five things every Yellow Zone school has in place.
         </h2>
 
         <div className="mt-10 border-t border-ink/15" data-reveal-group>
@@ -18,7 +18,7 @@ export default function MeasureSection() {
               <span className="font-mono text-[0.8rem] tracking-[0.1em] text-gold-deep sm:w-12">
                 {d.code}
               </span>
-              <h3 className="font-display text-[1.05rem] font-extrabold sm:w-72">
+              <h3 className="font-display text-[1.05rem] font-extrabold sm:w-80">
                 {d.title}
               </h3>
               <p className="text-[0.93rem] text-ink/65">{d.line}</p>

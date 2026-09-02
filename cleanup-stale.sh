@@ -1,45 +1,63 @@
 #!/usr/bin/env bash
 #
-# Removes component files from earlier versions of this project.
+# Removes files from earlier versions of this project.
 #
-# Needed if you unzipped this release over an older copy: unzipping adds and
-# overwrites files but never deletes ones that were removed, and the leftovers
-# still import content exports that no longer exist, which fails the build.
+# Needed if you unzipped a release over an older copy, or pulled a branch that
+# still has them: unzipping adds and overwrites files but never deletes ones
+# that were removed, and the leftovers still import things that no longer
+# exist, which fails the build with TS2305 / TS2307.
 #
-# This works off a whitelist of the components this release actually ships, so
-# it removes anything stale regardless of which older version you came from.
+# Works off a whitelist of what this release actually ships, so it stays
+# correct no matter which older version you are coming from.
 set -euo pipefail
 cd "$(dirname "$0")"
 
-KEEP="CtaButton FinalCta Footer Hero MeasureSection Nav ScrollReveals \
-SealMedallion StepsSection StickyCta TallyEmbed WistiaPlayer"
+COMPONENTS="CtaButton FinalCta Footer Hero MeasureSection Nav ScrollReveals \
+SealMedallion StepsSection StickyCta TallyEmbed VimeoPlayer"
+
+LIB="config content"
 
 removed=0
-for file in components/*.tsx; do
-  [ -e "$file" ] || continue
-  name="$(basename "$file" .tsx)"
-  case " $KEEP " in
-    *" $name "*) ;;
-    *)
-      echo "removing stale component: $file"
-      if git ls-files --error-unmatch "$file" >/dev/null 2>&1; then
-        git rm -q -f "$file"        # tracked: remove from git too, or CI still builds it
-      else
-        rm -f "$file"
-      fi
-      removed=$((removed + 1))
-      ;;
-  esac
-done
+
+drop() {
+  echo "  removing stale file: $1"
+  if git ls-files --error-unmatch "$1" >/dev/null 2>&1; then
+    git rm -q -f "$1"          # tracked: must leave git too, or CI still builds it
+  else
+    rm -rf "$1"
+  fi
+  removed=$((removed + 1))
+}
+
+prune() {  # prune <dir> <extension> <whitelist>
+  local dir="$1" ext="$2" keep="$3"
+  [ -d "$dir" ] || return 0
+  for path in "$dir"/*."$ext"; do
+    [ -e "$path" ] || continue
+    local name
+    name="$(basename "$path" ".$ext")"
+    case " $keep " in
+      *" $name "*) ;;
+      *) drop "$path" ;;
+    esac
+  done
+}
+
+prune components tsx "$COMPONENTS"
+prune lib ts "$LIB"
+
+# This release is fully static — there are no API routes and no extra type dirs.
+[ -d app/api ] && drop app/api
+[ -d types ]   && drop types
 
 rm -rf .next
 
 if [ "$removed" -eq 0 ]; then
-  echo "No stale components found. Tree is clean."
+  echo "No stale files found. Tree is clean."
 else
   echo ""
-  echo "Removed $removed stale component(s)."
-  echo "If these were tracked by git, commit and push the deletions:"
-  echo "  git commit -m 'Remove components cut in content trim' && git push"
+  echo "Removed $removed stale path(s)."
+  echo "If any were tracked by git, commit and push the deletions:"
+  echo "  git commit -m 'Remove files cut in the Tally migration' && git push"
 fi
-echo "Now run: npm run build"
+echo "Now run: npm install && npm run build"

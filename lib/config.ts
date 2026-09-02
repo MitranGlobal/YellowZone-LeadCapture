@@ -56,42 +56,15 @@ export const offer = {
   briefingMinutes: 14,
 } as const;
 
-/**
- * Accepts whatever form of Wistia reference you paste in and returns the
- * media hashed ID, which is the only thing an embed URL can use.
- *
- * Recognised: a bare hashed ID, a /medias/<id> or /m/<id> account URL, or an
- * /embed/iframe/<id> URL. NOT recognised: a /s/<slug> share link — per
- * Wistia's docs the share slug is a separate identifier space and is not the
- * hashed ID, so it cannot be embedded. Get the ID from Wistia's
- * Embed & Share dialog instead.
- */
-function resolveWistiaId(raw?: string): string {
-  const value = raw?.trim();
-  if (!value) return '';
-
-  const fromPath = value.match(/\/(?:medias|m|embed\/iframe)\/([a-z0-9]{8,12})/i);
-  if (fromPath) return fromPath[1];
-
-  // A share link cannot be resolved client-side; treat it as unset.
-  if (/\/s\//.test(value)) return '';
-
-  if (/^[a-z0-9]{8,12}$/i.test(value)) return value;
-
-  return '';
-}
-
 export const video = {
+  /** Vimeo id for the sales video shown on /briefing. */
+  vimeoId: process.env.NEXT_PUBLIC_VIMEO_ID ?? '1223315608',
   /**
-   * Set NEXT_PUBLIC_WISTIA_MEDIA_ID to the media hashed ID (about 10
-   * characters). In Wistia: open the video, click Embed & Share, and copy the
-   * id out of the embed code — it is the `media-id` attribute.
+   * Player box height as a percentage of its width. Vimeo's own embed code
+   * for this video uses 75%, i.e. 4:3. If you replace the video with a 16:9
+   * one, change this to '56.25%'.
    */
-  mediaId: resolveWistiaId(process.env.NEXT_PUBLIC_WISTIA_MEDIA_ID),
-  /** Shown as a fallback link while no embeddable id is configured. */
-  shareUrl:
-    process.env.NEXT_PUBLIC_WISTIA_SHARE_URL ??
-    'https://counselmitranglobal.wistia.com/s/b2ag5xkznld3bqt',
+  aspectPadding: process.env.NEXT_PUBLIC_VIDEO_ASPECT ?? '75%',
 } as const;
 
 export const tally = {

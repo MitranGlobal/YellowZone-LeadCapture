@@ -3,13 +3,36 @@
  * either states the offer or removes a reason to hesitate.
  */
 
-/** What the assessment scores. Codes are the identifiers used in the report. */
+/**
+ * The five requirements a school must have in place to be certified. Codes are
+ * the identifiers used in the school's report.
+ */
 export const domains = [
-  { code: 'D1', title: 'Student emotional climate', line: 'Measured, not estimated.' },
-  { code: 'D2', title: 'Teacher capacity', line: 'Can your staff respond to what they notice?' },
-  { code: 'D3', title: 'Help-seeking pathways', line: 'What happens when a child asks for help.' },
-  { code: 'D4', title: 'Parent alignment', line: 'How much pressure starts at home.' },
-  { code: 'D5', title: 'Policy vs practice', line: 'The gap between the file and the classroom.' },
+  {
+    code: 'D1',
+    title: 'Counsellor on staff',
+    line: 'A qualified counsellor with published, defined hours.',
+  },
+  {
+    code: 'D2',
+    title: 'Weekly sessions',
+    line: 'Wellbeing sessions conducted by the school.',
+  },
+  {
+    code: 'D3',
+    title: 'EPPT for educators',
+    line: 'Educator assessment and reports.',
+  },
+  {
+    code: 'D4',
+    title: 'Life skill sessions',
+    line: 'Taught as part of the school calendar, not one-off events.',
+  },
+  {
+    code: 'D5',
+    title: 'Emotional health social projects, with proof',
+    line: 'Address structural sources of student stress, not only individual support.',
+  },
 ];
 
 /** Three steps, in order. */

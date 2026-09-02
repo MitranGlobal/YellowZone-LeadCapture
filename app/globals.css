@@ -198,13 +198,6 @@ summary::-webkit-details-marker {
   display: none;
 }
 
-/* Wistia player sizing guard before the custom element defines itself */
-wistia-player:not(:defined) {
-  display: block;
-  padding-top: 56.25%;
-  filter: blur(5px);
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

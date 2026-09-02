@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import WistiaPlayer from '@/components/WistiaPlayer';
+import VimeoPlayer from '@/components/VimeoPlayer';
 import TallyEmbed from '@/components/TallyEmbed';
 import ScrollReveals from '@/components/ScrollReveals';
 import Footer from '@/components/Footer';
@@ -35,7 +35,7 @@ export default function BriefingPage() {
             </div>
 
             <div className="mx-auto mt-8 max-w-4xl">
-              <WistiaPlayer />
+              <VimeoPlayer />
             </div>
           </div>
         </section>
