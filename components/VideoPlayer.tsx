@@ -2,7 +2,21 @@
 
 import type { CSSProperties } from 'react';
 import { useEffect, useRef } from 'react';
-import { video as videoConfig } from '@/lib/config';
+
+/**
+ * Video source lives here rather than in lib/config so this component has no
+ * dependency on the shape of anything else in the project — it cannot break
+ * because a config export was renamed. Override either value with an
+ * environment variable; Next inlines NEXT_PUBLIC_* at build time.
+ */
+const DEFAULT_SRC =
+  process.env.NEXT_PUBLIC_VIDEO_SRC ??
+  'https://res.cloudinary.com/twteccae/video/upload/Yellow_Zone_V2_kvfb8m.mp4';
+
+/** Cloudinary renders a still from the same asset when you swap the extension. */
+const DEFAULT_POSTER =
+  process.env.NEXT_PUBLIC_VIDEO_POSTER ??
+  'https://res.cloudinary.com/twteccae/video/upload/Yellow_Zone_V2_kvfb8m.jpg';
 
 /**
  * Custom video player, ported from the Framer component at
@@ -43,8 +57,8 @@ type Props = {
 };
 
 export default function VideoPlayer({
-  src = videoConfig.src,
-  poster = videoConfig.poster,
+  src = DEFAULT_SRC,
+  poster = DEFAULT_POSTER,
   autoplay = false,
   autoMute = true,
   loop = false,
