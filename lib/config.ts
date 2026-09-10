@@ -1,7 +1,10 @@
 /**
  * Single source of truth for anything the marketing team changes often:
- * scheduling link, seat count, contact details, video id, tracking ids.
- * Nothing else in the codebase should hard-code these values.
+ * the scheduling form, contact details, tracking ids.
+ *
+ * The video is deliberately NOT here — it lives inside
+ * components/VideoPlayer.tsx, which imports nothing from the project so it
+ * cannot break when something in this file is renamed.
  */
 
 const FALLBACK_URL = 'https://schools.mitranglobal.com';
@@ -25,6 +28,7 @@ function resolveSiteUrl(): string {
   for (const raw of candidates) {
     const value = raw?.trim();
     if (!value) continue;
+
     const withScheme = /^https?:\/\//i.test(value) ? value : `https://${value}`;
     try {
       const url = new URL(withScheme);
@@ -54,17 +58,6 @@ export const offer = {
   name: 'Campus Readiness Audit',
   cohortName: 'Founding Cohort 2026',
   briefingMinutes: 14,
-} as const;
-
-export const video = {
-  /** Vimeo id for the sales video shown on /briefing. */
-  vimeoId: process.env.NEXT_PUBLIC_VIMEO_ID ?? '1223315608',
-  /**
-   * Player box height as a percentage of its width. Vimeo's own embed code
-   * for this video uses 75%, i.e. 4:3. If you replace the video with a 16:9
-   * one, change this to '56.25%'.
-   */
-  aspectPadding: process.env.NEXT_PUBLIC_VIDEO_ASPECT ?? '75%',
 } as const;
 
 export const tally = {

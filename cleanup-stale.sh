@@ -5,7 +5,7 @@
 # Needed if you unzipped a release over an older copy, or pulled a branch that
 # still has them: unzipping adds and overwrites files but never deletes ones
 # that were removed, and the leftovers still import things that no longer
-# exist, which fails the build with TS2305 / TS2307.
+# exist, which fails the build with TS2305 / TS2339 / TS2307.
 #
 # Works off a whitelist of what this release actually ships, so it stays
 # correct no matter which older version you are coming from.
@@ -13,7 +13,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 COMPONENTS="CtaButton FinalCta Footer Hero MeasureSection Nav ScrollReveals \
-SealMedallion StepsSection StickyCta TallyEmbed VimeoPlayer"
+SealMedallion StepsSection StickyCta TallyEmbed VideoPlayer"
 
 LIB="config content"
 
@@ -46,7 +46,7 @@ prune() {  # prune <dir> <extension> <whitelist>
 prune components tsx "$COMPONENTS"
 prune lib ts "$LIB"
 
-# This release is fully static — there are no API routes and no extra type dirs.
+# This release is fully static — no API routes, no extra type directories.
 [ -d app/api ] && drop app/api
 [ -d types ]   && drop types
 
@@ -58,6 +58,6 @@ else
   echo ""
   echo "Removed $removed stale path(s)."
   echo "If any were tracked by git, commit and push the deletions:"
-  echo "  git commit -m 'Remove files cut in the Tally migration' && git push"
+  echo "  git commit -m 'Remove stale files' && git push"
 fi
-echo "Now run: npm install && npm run build"
+echo "Now run: npm run build"

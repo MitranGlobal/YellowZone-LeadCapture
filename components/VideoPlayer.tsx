@@ -27,9 +27,9 @@ const DEFAULT_POSTER =
  * only exists inside Framer's runtime. Those are gone here, replaced by real
  * props. Three other things were changed deliberately:
  *
- *  - The YouTube and Vimeo branches are removed. We serve one MP4 from
- *    Cloudinary, and carrying two postMessage protocols we never use is
- *    surface area for nothing.
+ *  - The third-party streaming branches are removed. We serve one MP4 from
+ *    Cloudinary, and carrying postMessage protocols we never use is surface
+ *    area for nothing.
  *  - The drag-and-drop upload overlay and file picker are removed. They exist
  *    so a designer can swap the video on the Framer canvas; on a live landing
  *    page a "drop a file here" target is a bug, not a feature.
