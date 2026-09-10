@@ -1,5 +1,6 @@
 'use client';
 
+import type { CSSProperties } from 'react';
 import { useEffect, useRef } from 'react';
 import { video as videoConfig } from '@/lib/config';
 
@@ -652,31 +653,44 @@ export default function VideoPlayer({
 
     /* ---- Fullscreen ------------------------------------------------------ */
 
-    type FSEl = HTMLElement & {
-      webkitRequestFullscreen?: () => void;
-      msRequestFullscreen?: () => void;
+    /* The vendor-prefixed fullscreen APIs need care under `strict`.
+       Writing `(a || b || c).call(el)` — as the original JavaScript did —
+       builds a union of function types whose signatures differ, and
+       strictBindCallApply (implied by `strict: true`) then rejects the
+       `.call`. Picking one function into a single typed variable first
+       sidesteps that entirely. */
+    type FullscreenElement = HTMLElement & {
+      webkitRequestFullscreen?: () => unknown;
+      msRequestFullscreen?: () => unknown;
     };
-    type FSDoc = Document & {
-      webkitExitFullscreen?: () => void;
-      msExitFullscreen?: () => void;
-      webkitFullscreenElement?: Element;
-      msFullscreenElement?: Element;
+    type FullscreenDocument = Document & {
+      webkitExitFullscreen?: () => unknown;
+      msExitFullscreen?: () => unknown;
+      webkitFullscreenElement?: Element | null;
+      msFullscreenElement?: Element | null;
     };
 
-    function requestFS(el: FSEl) {
-      return (
-        el.requestFullscreen ||
-        el.webkitRequestFullscreen ||
-        el.msRequestFullscreen ||
-        function () {}
-      ).call(el);
+    function requestFS(el: FullscreenElement) {
+      const fn: (() => unknown) | undefined =
+        el.requestFullscreen ?? el.webkitRequestFullscreen ?? el.msRequestFullscreen;
+      try {
+        void fn?.call(el);
+      } catch {
+        /* denied by the browser — stay inline */
+      }
     }
     function exitFS() {
-      const d = document as FSDoc;
-      (d.exitFullscreen || d.webkitExitFullscreen || d.msExitFullscreen || function () {}).call(d);
+      const d = document as FullscreenDocument;
+      const fn: (() => unknown) | undefined =
+        d.exitFullscreen ?? d.webkitExitFullscreen ?? d.msExitFullscreen;
+      try {
+        void fn?.call(d);
+      } catch {
+        /* nothing to exit */
+      }
     }
     function isFS() {
-      const d = document as FSDoc;
+      const d = document as FullscreenDocument;
       return !!(d.fullscreenElement || d.webkitFullscreenElement || d.msFullscreenElement);
     }
     function toggleFullscreen() {
@@ -684,7 +698,7 @@ export default function VideoPlayer({
       if (!isFS()) {
         pw.classList.add('going-fullscreen');
         window.setTimeout(() => {
-          Promise.resolve(requestFS(pw as FSEl)).catch(() => {});
+          requestFS(pw as FullscreenElement);
           window.setTimeout(() => pw.classList.remove('going-fullscreen'), 600);
         }, 80);
       } else {
@@ -864,7 +878,7 @@ export default function VideoPlayer({
     width: '100%',
     '--radius': `${cornerRadius}px`,
     '--progress-color': progressColor,
-  } as React.CSSProperties;
+  } as CSSProperties;
 
   return (
     <div
